@@ -64,12 +64,12 @@ export class LLRPTypedMessage<
             const { td: name, repeat } = tRef;
             if (repeat === "0-1" || repeat === "1") {
                 _LLRPTypedMessage.prototype[`set${name}`] = function <T extends _LLRPTypedMessage>(this: T, p: LLRPProxyParameter) {
-                    this.setSubParameter(name as any, p);
+                    this.setSubParameter(name as any, p as any);
                     return this;
                 }
             } else {
                 _LLRPTypedMessage.prototype[`add${name}`] = function <T extends _LLRPTypedMessage>(this: T, p: LLRPProxyParameter) {
-                    this.addSubParameter(name as any, p);
+                    this.addSubParameter(name as any, p as any);
                     return this;
                 }
             }
@@ -103,7 +103,7 @@ export class LLRPTypedMessage<
     setField<
         FN extends TD['fieldDescriptors'][number]['name'],
         FD extends Extract<TD['fieldDescriptors'][number], { name: FN }>,
-        DT extends GetDataTypeFromFD<FD>[FN]
+        DT extends GetDataTypeFromFD<FD>[FN & keyof GetDataTypeFromFD<FD>]
     >(name: FN, v: DT) {
         this.origin.setField(name, v);
         return this;
@@ -112,7 +112,7 @@ export class LLRPTypedMessage<
     getField<
         FN extends TD['fieldDescriptors'][number]['name'],
         FD extends Extract<TD['fieldDescriptors'][number], { name: FN }>,
-        DT extends GetDataTypeFromFD<FD>[FN]
+        DT extends GetDataTypeFromFD<FD>[FN & keyof GetDataTypeFromFD<FD>]
     >(name: FN) {
         return this.origin.getField(name) as DT;
     }

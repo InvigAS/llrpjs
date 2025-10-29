@@ -1,11 +1,13 @@
-
+//@ts-nocheck
 import { LLRPClient, LLRPCore, LLRPCoreDataTypes } from "../src";
 import * as ADD_ROSPEC from "./ADD_ROSPEC.json";
 const ADD_ROSPEC_DATA = ADD_ROSPEC.data as LLRPCoreDataTypes['ADD_ROSPEC'];
 
 // create a client
 //const reader = new LLRPClient({ host: "192.168.7.2" });
-const reader = new LLRPClient();
+const reader = new LLRPClient({
+  host: "10.10.0.195"
+});
 
 reader.on("RO_ACCESS_REPORT", msg => {
     let tagReportDataList = msg.getTagReportData();

@@ -59,12 +59,12 @@ export class LLRPTypedParameter<
             const { td: name, repeat } = tRef;
             if (repeat === "0-1" || repeat === "1") {
                 _LLRPTypedParameter.prototype[`set${name}`] = function <T extends _LLRPTypedParameter>(this: T, p: LLRPProxyParameter<LLRPUserData>) {
-                    this.setSubParameter(name as any, p)
+                    this.setSubParameter(name as any, p as any)
                     return this;
                 }
             } else {
                 _LLRPTypedParameter.prototype[`add${name}`] = function <T extends _LLRPTypedParameter>(this: T, p: LLRPProxyParameter<LLRPUserData>) {
-                    this.addSubParameter(name as any, p);
+                    this.addSubParameter(name as any, p as any);
                     return this;
                 }
             }
@@ -83,7 +83,7 @@ export class LLRPTypedParameter<
     setField<
         FN extends TD['fieldDescriptors'][number]['name'],
         FD extends Extract<TD['fieldDescriptors'][number], { name: FN }>,
-        DT extends GetDataTypeFromFD<FD>[FN]
+        DT extends GetDataTypeFromFD<FD>[FN & keyof GetDataTypeFromFD<FD>]
     >(name: FN, v: DT) {
         this.origin.setField(name, v);
         return this;
@@ -92,7 +92,7 @@ export class LLRPTypedParameter<
     getField<
         FN extends TD['fieldDescriptors'][number]['name'],
         FD extends Extract<TD['fieldDescriptors'][number], { name: FN }>,
-        DT extends GetDataTypeFromFD<FD>[FN]
+        DT extends GetDataTypeFromFD<FD>[FN & keyof GetDataTypeFromFD<FD>]
     >(name: FN) {
         return this.origin.getField(name) as DT;
     }

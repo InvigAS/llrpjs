@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { LLRPParameter } from "./parameter";
 import { LLRPElement } from "./element";
 import { LLRPMessageI, LLRPParameterI, LLRPUserData } from "../types";

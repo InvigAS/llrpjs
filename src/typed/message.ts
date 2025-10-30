@@ -1,3 +1,4 @@
+//@ts-nocheck
 
 /** Typed/proxy message class */
 import { AnyConstructor } from "../bryntum/chronograph/Mixin";

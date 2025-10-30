@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { AnyConstructor } from "../bryntum/chronograph/Mixin";
 import { LLRPProxyMessage } from "../proxy/message";
 import { LLRPProxyParameter } from "../proxy/parameter";

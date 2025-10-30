@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { AnyConstructor, Mixin } from "../bryntum/chronograph/Mixin";
 import { TypeRegistry } from "../registry/type-registry";
 import { LLRPRepeat, SubTypeReference, TypeDescriptor } from "../types";

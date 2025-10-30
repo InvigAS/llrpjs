@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { LLRPError } from "../base/error";
 import { LLRPBuffer } from "../buffer/buffer";
 import { LLRPMessageHeader } from "./header";

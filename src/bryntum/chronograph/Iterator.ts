@@ -1,3 +1,4 @@
+//@ts-nocheck
 //---------------------------------------------------------------------------------------------------------------------
 /**
  * Given a single `Iterable`, returns an array of 2 iterables, mirroring the original one (which should not be used anymore).

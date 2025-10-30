@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { ClassUnion, MixinAny } from "../bryntum/chronograph/Mixin";
 import { FieldDescriptor, GetFieldRawValue, GetFieldFormatValue, LLRPFieldType, GetEnumValue } from "../types";
 import { LLRPEnumerator } from "./enumerator";

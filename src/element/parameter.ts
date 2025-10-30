@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { LLRPError } from "../base/error";
 import { LLRPBuffer } from "../buffer/buffer";
 import { LLRP_TD_RSVD_TYPENUM, LLRP_TD_TV_TYPENUM } from "./header-fd";

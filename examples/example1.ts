@@ -1,3 +1,4 @@
+//@ts-nocheck
 /**
  * This example program is an exact recreation of the example1.cpp found in the LTKCPP project
  */

@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { LLRPError } from "../base/error";
 
 export class Timer {

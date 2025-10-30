@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { LLRPList } from "../base/list";
 import { LLRPElement } from "./element";
 

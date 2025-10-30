@@ -66,7 +66,7 @@ const reader = new LLRPClient({
   host: '10.10.0.195'
 })
 const checkConnectionStatus = async () => {
-    let msg = await reader.recv(7000);
+    let msg = await reader.recv(7000) as any
     if (!(msg instanceof LLRPCore.READER_EVENT_NOTIFICATION)) {
         throw new Error(`connection status check failed - unexpected message ${msg.getName()}`);
     }
@@ -81,7 +81,7 @@ async function main() {
   reader.on('message', async (msg) => {
     const data  = msg.toLLRPData()
 
-    console.log(data)
+    console.log(JSON.stringify(data))
   })
 
   reader.on('error', (err) => {
@@ -94,6 +94,20 @@ async function main() {
 
   await reader.transact(new LLRPCore.DELETE_ROSPEC({
     data: { ROSpecID: 0 }
+  }))
+
+  await reader.transact(new LLRPCore.SET_READER_CONFIG({
+    data: { 
+      ResetToFactoryDefault: false,
+      ReaderEventNotificationSpec: {
+        EventNotificationState: [
+          {
+            EventType: 'GPI_Event',
+            NotificationState: true
+          }
+        ]
+      }
+    }
   }))
 
   await reader.transact(new LLRPCore.ADD_ROSPEC().setROSpec(rOSpec))

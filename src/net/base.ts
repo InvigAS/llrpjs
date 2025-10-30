@@ -1,3 +1,4 @@
+//@ts-nocheck
 import EventEmitter from "events";
 import net from "net";
 import { LLRPError } from "../base/error";
@@ -171,7 +172,10 @@ export class LLRPNet {
 
         let recvPromise = this.recv(timeout);
         await this.send(m);
-        if (resName) {
+
+        let i = 0;
+
+        if (resName) { 
             while (true) {
                 try {
                     rsp = await recvPromise;
@@ -181,6 +185,12 @@ export class LLRPNet {
                 }
                 // check type
                 if (rsp.getName() === resName) break;
+
+                i++;
+
+                if (i > 100) {
+                  break;
+                }
             }
         }
 

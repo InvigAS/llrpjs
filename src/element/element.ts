@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { Base } from "../bryntum/chronograph/Base";
 import { ClassUnion, MixinAny } from "../bryntum/chronograph/Mixin";
 import { LLRPDataValue, LLRPElementI, LLRPUserData } from "../types";

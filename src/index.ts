@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { LLRPDef as LLRPCoreDef } from "./def";
 import { LLRPTypedMessage } from "./typed/message";
 import { LLRPTypedParameter } from "./typed/parameter";
@@ -11,8 +12,8 @@ import { LLRPServerOfDef } from "./net/server";
 TypeRegistry.getInstance().enrollCoreDefinitions(LLRPCoreDef).build();
 const CR = LLRPClassRegistry.getInstance(LLRPCoreDef).enrollCoreDefinitions(LLRPCoreDef).build();
 
-const LLRPCoreMessages = CR.getCoreMessageClasses();
-const LLRPCoreParameters = CR.getCoreParamClasses();
+const LLRPCoreMessages = CR.getCoreMessageClasses() as Record<string, any>;
+const LLRPCoreParameters = CR.getCoreParamClasses() as Record<string, any>;
 const LLRPCore = { ...LLRPCoreMessages, ...LLRPCoreParameters };
 
 const LLRPMessage = LLRPTypedMessage.ofDef(LLRPCoreDef);

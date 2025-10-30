@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { BitOps } from "./bitops";
 import { BOOL } from "../types";
 

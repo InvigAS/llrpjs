@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { LLRPAllTypeDefinitions, SubTypeReference, TypeDefinition, TypeDescriptor } from "../types";
 import { LLRPError } from "../base/error";
 

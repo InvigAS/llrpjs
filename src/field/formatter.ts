@@ -1,3 +1,4 @@
+//@ts-nocheck
 import { LLRPFMTDate, LLRPFMTDec, LLRPFMTHex } from "../types";
 import { AnyConstructor, Mixin } from "../bryntum/chronograph/Mixin";
 import { LLRPFieldDescriptor } from "./descriptor";

@@ -78,47 +78,64 @@ const checkConnectionStatus = async () => {
 }
 
 async function main() {
-  reader.on('message', async (msg) => {
-    const data  = msg.toLLRPData()
+  try {
+    reader.on('message', async (msg) => {
+      const data  = msg.toLLRPData()
 
-    console.log(JSON.stringify(data))
-  })
-
-  reader.on('error', (err) => {
-    console.error('Error:', err)
-  })
-
-  await reader.connect()
-  
-  await checkConnectionStatus()
-
-  await reader.transact(new LLRPCore.DELETE_ROSPEC({
-    data: { ROSpecID: 0 }
-  }))
-
-  await reader.transact(new LLRPCore.SET_READER_CONFIG({
-    data: { 
-      ResetToFactoryDefault: false,
-      ReaderEventNotificationSpec: {
-        EventNotificationState: [
-          {
-            EventType: 'GPI_Event',
-            NotificationState: true
-          }
-        ]
+      if (data.type === 'KEEPALIVE') {
+        reader.send(new LLRPCore.KEEPALIVE_ACK({
+          id: msg.getMessageId(),
+          data: {}
+        }))
       }
-    }
-  }))
 
-  await reader.transact(new LLRPCore.ADD_ROSPEC().setROSpec(rOSpec))
+      console.log(JSON.stringify(data))
+    })
 
-  await reader.transact(new LLRPCore.ENABLE_ROSPEC({
-    data: { ROSpecID: 1 }
-  }))
+    reader.on('error', (err) => {
+      console.error('Error:', err)
+    })
 
-  await reader.transact(new LLRPCore.START_ROSPEC({
-    data: { ROSpecID: 1 }
-  }))
+    await reader.connect()
+
+    await checkConnectionStatus()
+
+    await reader.transact(new LLRPCore.DELETE_ROSPEC({
+      data: { ROSpecID: 0 }
+    }))
+
+    await reader.transact(new LLRPCore.SET_READER_CONFIG({
+      data: { 
+        ResetToFactoryDefault: false,
+        ReaderEventNotificationSpec: {
+          EventNotificationState: [
+            {
+              EventType: 'GPI_Event',
+              NotificationState: true
+            }
+          ]
+        },
+        KeepaliveSpec: {
+          KeepaliveTriggerType: 'Periodic',
+          PeriodicTriggerValue: 3000
+        }
+      }
+    }))
+
+    await reader.transact(new LLRPCore.ADD_ROSPEC().setROSpec(rOSpec))
+
+    await reader.transact(new LLRPCore.ENABLE_ROSPEC({
+      data: { ROSpecID: 1 }
+    }))
+
+    await reader.transact(new LLRPCore.START_ROSPEC({
+      data: { ROSpecID: 1 }
+    }))
+  } catch (error) {
+    console.log(error)
+  }
 }
 
-main()
+main().then(() => {
+  console.log('Done')
+})

@@ -160,7 +160,7 @@ export class LLRPNet {
 
     async recv(timeout = 5000) {
         const _timer = new Timer;
-        if (timeout > 0) _timer.start(timeout);
+        if (timeout > 0) _timer.start(timeout).catch(() => { });
         let msg: LLRPMessage = await Promise.race([this._recv(), _timer.watch()]);
         _timer.cancel();
         return msg;

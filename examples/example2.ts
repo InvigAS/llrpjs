@@ -1,3 +1,4 @@
+import { randomInt } from "node:crypto";
 import { LLRPClient, LLRPCore, LLRPCoreDataTypes } from "../src";
 
 const rOSpec = new LLRPCore.ROSpec({
@@ -16,7 +17,7 @@ const rOSpec = new LLRPCore.ROSpec({
     },
     AISpec: [
       {
-        AntennaIDs: [1, 2, 3, 4, 5, 6],
+        AntennaIDs: [1, 2],
         AISpecStopTrigger: {
           AISpecStopTriggerType: 'Null',
           DurationTrigger: 0
@@ -24,22 +25,40 @@ const rOSpec = new LLRPCore.ROSpec({
         InventoryParameterSpec: {
           InventoryParameterSpecID: 1,
           ProtocolID: 'EPCGlobalClass1Gen2',
-          AntennaConfiguration: {
-            AntennaID: 0,
-            RFTransmitter: {
-              HopTableID: 1,
-              ChannelIndex: 1,
-              TransmitPower: 1
+          AntennaConfiguration: [
+            {
+              AntennaID: 1,
+              RFTransmitter: {
+                HopTableID: 1,
+                ChannelIndex: 1,
+                TransmitPower: 10
+              },
+              C1G2InventoryCommand: {
+                TagInventoryStateAware: false,
+                C1G2SingulationControl: {
+                  Session: 0,
+                  TagPopulation: 10,
+                  TagTransitTime: 0
+                }
+              }  
             },
-            C1G2InventoryCommand: {
-              TagInventoryStateAware: false,
-              C1G2SingulationControl: {
-                Session: 0,
-                TagPopulation: 10,
-                TagTransitTime: 0
-              }
-            }  
-          }
+            {
+              AntennaID: 2,
+              RFTransmitter: {
+                HopTableID: 1,
+                ChannelIndex: 1,
+                TransmitPower: 10
+              },
+              C1G2InventoryCommand: {
+                TagInventoryStateAware: false,
+                C1G2SingulationControl: {
+                  Session: 0,
+                  TagPopulation: 10,
+                  TagTransitTime: 0
+                }
+              }  
+            }
+          ]
         }
       }
     ],
@@ -79,13 +98,31 @@ const checkConnectionStatus = async () => {
 
 async function main() {
   try {
+    reader.on('disconnect', () => {
+      console.log('Disconnected from reader')
+    })
+
     reader.on('message', async (msg) => {
       const data  = msg.toLLRPData()
 
       if (data.type === 'KEEPALIVE') {
-        reader.send(new LLRPCore.KEEPALIVE_ACK({
-          id: msg.getMessageId(),
-          data: {}
+        //reader.send(new LLRPCore.KEEPALIVE_ACK({
+        //  id: msg.getMessageId(),
+        //  data: {}
+        //}))
+
+        const random = Math.random() > 0.5
+
+        console.log(`Setting GPO2 to ${random}`)
+
+        await reader.send(new LLRPCore.SET_READER_CONFIG({
+          data: {
+            ResetToFactoryDefault: false,
+            GPOWriteData: {
+              GPOPortNumber: 2,
+              GPOData: random
+            },
+          }
         }))
       }
 
@@ -106,7 +143,7 @@ async function main() {
 
     await reader.transact(new LLRPCore.SET_READER_CONFIG({
       data: { 
-        ResetToFactoryDefault: false,
+        ResetToFactoryDefault: true,
         ReaderEventNotificationSpec: {
           EventNotificationState: [
             {
@@ -118,7 +155,11 @@ async function main() {
         KeepaliveSpec: {
           KeepaliveTriggerType: 'Periodic',
           PeriodicTriggerValue: 3000
-        }
+        },
+        GPOWriteData: {
+          GPOPortNumber: 1,
+          GPOData: 1
+        },
       }
     }))
 
@@ -136,6 +177,4 @@ async function main() {
   }
 }
 
-main().then(() => {
-  console.log('Done')
-})
+main()
